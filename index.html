@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Incognito</title>
+  <link rel="apple-touch-icon" sizes="180x180" href="/icon-180.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/icon-32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/icon-16.png">
+  <link rel="manifest" href="/manifest.json">
+  <meta property="og:url" content="https://incognito.danq.dev/">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://incognito.danq.dev/incognito-og.png">
+  <meta property="og:title" content="Incognito (Weird Web October 2026)">
+  <meta property="og:description" content="Browse Wikipedia from the anonymity of your own virtual paper bag mask. Does nothing else to protect your privacy.">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="description" content="Browse Wikipedia from the anonymity of your own virtual paper bag mask. Does nothing else to protect your privacy.">
+  <!-- <link rel="preload" as="fetch" href="https://octothorp.es/?uri=https://incognito.danq.dev/"> -->
+  <link rel="octo:octothorpes" href="weirdweboctober">
+  <link rel="octo:octothorpes" href="Incognito">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      overflow: hidden;
+      font-family: system-ui, sans-serif;
+      font-weight: normal;
+      background: #fff;
+      color: #000;
+
+      & > * {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100dvh;
+      }
+    }
+
+    #instructions {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background-color: rgba(255, 255, 255, 0.9);
+      z-index: 1;
+      opacity: 1;
+      transition: opacity 0.5s ease-in;
+
+      h1 {
+        font-size: 2rem;
+        margin-bottom: 1rem;
+      }
+
+      p {
+        font-size: 1.2rem;
+        max-width: 600px;
+        text-align: center;
+      }
+
+      &.hidden {
+        pointer-events: none;
+        opacity: 0;
+      }
+    }
+
+    button {
+      font: inherit;
+      cursor: pointer;
+      border: 2px solid #1126e4;
+      background: #1b74de;
+      color: #fff;
+
+      &:hover, &:focus {
+        background: #3c8ae7;
+      }
+    }
+
+    #arrow {
+      position: absolute;
+      bottom: -4vw;
+      right: calc(8vw + 4rem);
+      width: 26vw;
+    }
+
+    #dismiss-instructions {
+      margin-top: 1rem;
+      padding: 0.5rem 1rem;
+    }
+
+    #overlay {
+      pointer-events: none;
+      z-index: 2;
+
+      #incognito-toggle {
+        position: absolute;
+        bottom: 1rem;
+        right: 2rem;
+        cursor: pointer;
+      }
+    }
+
+    #instructions.hidden ~ #overlay #incognito-toggle {
+      pointer-events: auto;
+    }
+
+    #incognito-toggle {
+      width: 8vw;
+      height: auto;
+      border-radius: 50%;
+      padding: 1.5vw;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Registered so it can be transitioned */
+    @property --inner-bag-color {
+      syntax: '<color>';
+      inherits: true;
+      initial-value: #907c46;
+    }
+
+    #incognito-filter {
+      --inner-bag-color: #907c46;
+      --edge-height: 4vw;
+      --eye-rx: 18vw;
+      --eye-ry: 10.5vw;
+      --eye-border: 1vw;
+      --eye-y: 40%;
+      --eye-inner-rx: calc(var(--eye-rx) - var(--eye-border));
+      --eye-inner-ry: calc(var(--eye-ry) - var(--eye-border));
+
+      position: absolute;
+      width: 100vw;
+      height: 105lvh;
+      top: -105lvh;
+      left: 0;
+      transform: scale(1);
+
+      background: linear-gradient(var(--inner-bag-color), var(--inner-bag-color)) top / 100% calc(100% - var(--edge-height) + 1px) no-repeat;
+      mask-image:
+        radial-gradient(ellipse var(--eye-inner-rx) var(--eye-inner-ry) at 30% var(--eye-y), transparent 99%, #000 100%),
+        radial-gradient(ellipse var(--eye-inner-rx) var(--eye-inner-ry) at 70% var(--eye-y), transparent 99%, #000 100%);
+      mask-repeat: no-repeat;
+      mask-composite: intersect;
+
+      /* Torn, zigzag bottom edge: paper teeth (::before) under a thick black outline (::after) */
+      &::before, &::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        height: var(--edge-height);
+      }
+      &::before {
+        background: var(--inner-bag-color);
+        mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 20' preserveAspectRatio='none'%3E%3Cpolygon points='0,0 0,4 8,17 15,6 24,18 31,3 40,16 47,7 55,18 63,4 71,16 79,5 88,18 94,8 100,4 100,0'/%3E%3C/svg%3E") left top / 25vw 100% repeat-x;
+      }
+      &::after {
+        background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 20' preserveAspectRatio='none'%3E%3Cpolyline fill='none' stroke='%23000' stroke-width='6' stroke-linejoin='round' stroke-linecap='round' vector-effect='non-scaling-stroke' points='0,4 8,17 15,6 24,18 31,3 40,16 47,7 55,18 63,4 71,16 79,5 88,18 94,8 100,4'/%3E%3C/svg%3E") left top / 25vw 100% repeat-x;
+      }
+
+      .eye-hole {
+        position: absolute;
+        top: calc(var(--eye-y) - var(--eye-ry));
+        width: calc(var(--eye-rx) * 2);
+        height: calc(var(--eye-ry) * 2);
+        border: var(--eye-border) solid #000;
+        border-radius: 50%;
+
+        &.left {
+          left: calc(30% - var(--eye-rx));
+        }
+
+        &.right {
+          left: calc(70% - var(--eye-rx));
+        }
+      }
+    }
+
+    #incognito-result {
+      position: absolute;
+      top: 105lvh;
+      left: 0;
+      width: 100%;
+      padding: 1vw;
+      text-align: center;
+      font-size: 1.4rem;
+      color: #fffa;
+
+      .small {
+        font-size: 1rem;
+      }
+
+      a {
+        color: #fff;
+        font-weight: bold;
+        pointer-events: auto;
+
+        &:hover {
+          background: #fffa;
+          color: #000;
+        }
+      }
+    }
+
+    /* Incognito transition */
+    .incognito {
+      #overlay #incognito-toggle {
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.15s ease-out;
+      }
+
+      #incognito-filter {
+        top: 0;
+        --inner-bag-color: #3b2800;
+        transition: top 1s ease-out 1.25s, --inner-bag-color 1s linear 1.25s, transform 0.25s ease-in 2.15s;
+        transform: scale(1.3);
+      }
+
+      #incognito-result {
+        top: 75vh;
+        transition: top 0.5s ease-out 2.25s;
+      }
+    }
+
+    #icon-mask-clone {
+      position: fixed;
+      height: auto;
+      aspect-ratio: 162 / 179;
+      animation: icon-mask-up 0.9s ease-in 0.15s forwards;
+    }
+
+    @keyframes icon-mask-up {
+      to {
+        left: 10vw;
+        width: 80vw;
+        top: calc(-80vw * 179 / 162);
+      }
+    }
+  </style>
+</head>
+<body>
+  <iframe src="https://en.wikipedia.org/wiki/Main_Page"></iframe>
+  <div id="instructions">
+    <h1>Incognito Mode for Wikipedia!</h1>
+    <p>
+      Browse Wikipedia as normal. When you want to go incognito,
+      click the button!
+    </p>
+    <p>
+      <button id="dismiss-instructions">Start</button>
+    </p>
+    <svg id="arrow" xmlns="http://www.w3.org/2000/svg" xml:space="preserve" transform="scale(1 -1)" viewBox="0 0 370 370"><path d="M362 147q-1 0 0 0l-1-6c-30-41-76-73-120-98q-3-1-7 2-6-1-8 6-2 25 1 49C124 84-35 158 7 282v9q11 12 24 22c5 4 16 17 24 13 26 3 51-2 77-6l3-2q5 0 5-4c1-47 44-69 86-71q3-1 5-4l2 1 2 5q-2 4 1 6c8 7 17 10 25 18q4 2 8 1 42-26 77-59c13-14 36-46 16-64M130 308l-3-1c-24 4-47 10-72 8l-5-5-13-10-13-11q37 2 73-3l4-3 2-3c7-60 69-84 123-83l-1 2c0 9-2 23 1 33-43-6-101 29-96 76m98-124c-53-3-137 25-134 90l-76 3C-6 163 129 95 227 113v1c1 6 9 6 10 0q3-31 2-60c37 29 77 54 108 92q-56 38-105 84l-2-13-2-18q0-3-3-5c1-4-1-10-7-10m87 36q-17 15-37 28l-14 9c-1 1-15-9-21-12l111-87c4 27-19 45-39 62"/></svg>
+  </div>
+  <div id="overlay">
+    <button id="incognito-toggle" aria-label="Toggle Incognito Mode"><svg id="icon-mask" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 162 179"><g stroke="#000" transform="translate(-22 -54)"><path fill="#907c46" stroke-width="2" d="m24 56 158-1 1 176-17-16-17 13-17-10-20 12-17-11-12 10-18-13-15 10-11-8-16 8Z"/><ellipse cx="69.4" cy="119.2" fill="#030201" stroke-width="1.9" rx="22.6" ry="12.8"/><ellipse cx="135" cy="119.2" fill="#030201" stroke-width="1.9" rx="22.6" ry="12.8"/></g></svg></button>
+    <div id="incognito-filter">
+      <div class="eye-hole left"></div>
+      <div class="eye-hole right"></div>
+    </div>
+    <div id="incognito-result">
+      <p>
+        You are now in incognito mode! (And you're rocking that paper bag. It really suits you!)
+      </p>
+      <p class="small">
+        This has been a
+        <a href="https://danq.me/">Dan Q</a> thing for
+        <a href="https://weirdweboctober.website/">Weird Web October</a> 2026.
+        <a href="https://github.com/Dan-Q/incognito">Source code</a>.
+        <a href="https://danq.me/2026/10/23/incognito-wwo/">Blog post</a>.
+      </p>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('dismiss-instructions').addEventListener('click', function() {
+      document.getElementById('instructions').classList.add('hidden');
+    });
+
+    document.getElementById('incognito-toggle').addEventListener('click', function() {
+      const mask = document.getElementById('icon-mask');
+      const rect = mask.getBoundingClientRect();
+      const clone = mask.cloneNode(true);
+      clone.id = 'icon-mask-clone';
+      clone.style.left = `${rect.left}px`;
+      clone.style.top = `${rect.top}px`;
+      clone.style.width = `${rect.width}px`;
+      document.getElementById('overlay').appendChild(clone);
+      mask.style.visibility = 'hidden';
+      document.body.classList.add('incognito');
+    });
+  </script>
+</body>
+</html>
